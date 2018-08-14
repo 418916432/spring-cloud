@@ -1,5 +1,8 @@
 zuul:
   routes:
-    api-user:
-      path: /api-user/**
-      serviceId: user-service
+#    user-api:
+#      path: /user-api/**
+#      serviceId: user-service
+    oss-api:
+      path: /oss-api/**
+      serviceId: oss-service
