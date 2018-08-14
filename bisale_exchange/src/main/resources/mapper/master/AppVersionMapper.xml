@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bisale.exchange.dao.AppVersionDao">
+  <resultMap id="BaseResultMap" type="com.bisale.exchange.po.AppVersionPo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="lang" jdbcType="VARCHAR" property="lang" />
+    <result column="source" jdbcType="VARCHAR" property="source" />
+    <result column="version" jdbcType="VARCHAR" property="version" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, lang, source, version, status, title, content, url, create_time, update_time
+  </sql>
+
+  <insert id="insertAppVersion" parameterType="com.bisale.exchange.po.AppVersionPo" keyColumn="id" useGeneratedKeys="true">
+    INSERT INTO `app_version`
+    (`lang`,
+    `source`,
+    `version`,
+    `status`,
+    `title`,
+    `content`,
+    `url`,
+    `create_time`,
+    `update_time`)
+    VALUES
+    (#{lang},
+    #{source},
+    #{version},
+    #{status},
+    #{title},
+    #{content},
+    #{url},
+    #{createTime},
+    #{updateTime});
+  </insert>
+
+  <update id="updateAppVersion" parameterType="com.bisale.exchange.po.AppVersionPo">
+    update `app_version`
+    set `lang` = #{lang},
+    `source` = #{source},
+    `version` = #{version},
+    `status` = #{status},
+    `title` = #{title},
+    `content` = #{content},
+    `url` = #{url},
+    `update_time` = #{updateTime}
+    where id = #{id};
+  </update>
+
+
+
+  <select id="selectAppVersionBy" parameterType="Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from app_version
+    <where>
+      1 = 1
+      <if test="version != null and version != ''">
+        and `version` = #{version, jdbcType=VARCHAR}
+      </if>
+      <if test="status != null and status >= 0">
+        and `status` = #{status, jdbcType=INTEGER}
+      </if>
+    </where>
+    order by id desc
+    <if test="startPage != null and pageSize != null">
+      limit #{startPage,jdbcType=INTEGER}, #{pageSize,jdbcType=INTEGER}
+    </if>
+  </select>
+
+  <select id="selectAppVersionCountBy" parameterType="Map" resultType="Integer">
+    select count(id)
+    from app_version
+    <where>
+      1 = 1
+      <if test="version != null and version != ''">
+        and `version` = #{version, jdbcType=VARCHAR}
+      </if>
+      <if test="status != null and status >= 0">
+        and `status` = #{status, jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
+</mapper>
